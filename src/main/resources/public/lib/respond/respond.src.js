@@ -5,16 +5,18 @@
 
 /*! matchMedia() polyfill - Test a CSS media type/query in JS. Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas. Dual MIT/BSD license */
 /*! NOTE: If you're already including a window.matchMedia polyfill via Modernizr or otherwise, you don't need this part */
-(function(w) {
+(function (w) {
   "use strict";
-  w.matchMedia = w.matchMedia || function(doc, undefined) {
-    var bool, docElem = doc.documentElement, refNode = docElem.firstElementChild || docElem.firstChild, fakeBody = doc.createElement("body"), div = doc.createElement("div");
+  w.matchMedia = w.matchMedia || function (doc, undefined) {
+    var bool, docElem = doc.documentElement, refNode = docElem.firstElementChild
+        || docElem.firstChild, fakeBody = doc.createElement("body"), div = doc.createElement("div");
     div.id = "mq-test-1";
     div.style.cssText = "position:absolute;top:-100em";
     fakeBody.style.background = "none";
     fakeBody.appendChild(div);
-    return function(q) {
-      div.innerHTML = '&shy;<style media="' + q + '"> #mq-test-1 { width: 42px; }</style>';
+    return function (q) {
+      div.innerHTML = '&shy;<style media="' + q
+      + '"> #mq-test-1 { width: 42px; }</style>';
       docElem.insertBefore(fakeBody, refNode);
       bool = div.offsetWidth === 42;
       docElem.removeChild(fakeBody);
@@ -26,28 +28,29 @@
   }(w.document);
 })(this);
 
-(function(w) {
+(function (w) {
   "use strict";
   var respond = {};
   w.respond = respond;
-  respond.update = function() {};
-  var requestQueue = [], xmlHttp = function() {
+  respond.update = function () {
+  };
+  var requestQueue = [], xmlHttp = function () {
     var xmlhttpmethod = false;
     try {
       xmlhttpmethod = new w.XMLHttpRequest();
     } catch (e) {
       xmlhttpmethod = new w.ActiveXObject("Microsoft.XMLHTTP");
     }
-    return function() {
+    return function () {
       return xmlhttpmethod;
     };
-  }(), ajax = function(url, callback) {
+  }(), ajax = function (url, callback) {
     var req = xmlHttp();
     if (!req) {
       return;
     }
     req.open("GET", url, true);
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
       if (req.readyState !== 4 || req.status !== 200 && req.status !== 304) {
         return;
       }
@@ -57,7 +60,7 @@
       return;
     }
     req.send(null);
-  }, isUnsupportedMediaQuery = function(query) {
+  }, isUnsupportedMediaQuery = function (query) {
     return query.replace(respond.regex.minmaxwh, "").match(respond.regex.other);
   };
   respond.ajax = ajax;
@@ -75,12 +78,15 @@
     minmaxwh: /\(\s*m(in|ax)\-(height|width)\s*:\s*(\s*[0-9\.]+)(px|em)\s*\)/gi,
     other: /\([^\)]*\)/g
   };
-  respond.mediaQueriesSupported = w.matchMedia && w.matchMedia("only all") !== null && w.matchMedia("only all").matches;
+  respond.mediaQueriesSupported = w.matchMedia && w.matchMedia("only all")
+  !== null && w.matchMedia("only all").matches;
   if (respond.mediaQueriesSupported) {
     return;
   }
-  var doc = w.document, docElem = doc.documentElement, mediastyles = [], rules = [], appendedEls = [], parsedSheets = {}, resizeThrottle = 30, head = doc.getElementsByTagName("head")[0] || docElem, base = doc.getElementsByTagName("base")[0], links = head.getElementsByTagName("link"), lastCall, resizeDefer, eminpx, getEmValue = function() {
-    var ret, div = doc.createElement("div"), body = doc.body, originalHTMLFontSize = docElem.style.fontSize, originalBodyFontSize = body && body.style.fontSize, fakeUsed = false;
+  var doc = w.document, docElem = doc.documentElement, mediastyles = [], rules = [], appendedEls = [], parsedSheets = {}, resizeThrottle = 30, head = doc.getElementsByTagName("head")[0]
+      || docElem, base = doc.getElementsByTagName("base")[0], links = head.getElementsByTagName("link"), lastCall, resizeDefer, eminpx, getEmValue = function () {
+    var ret, div = doc.createElement("div"), body = doc.body, originalHTMLFontSize = docElem.style.fontSize, originalBodyFontSize = body
+        && body.style.fontSize, fakeUsed = false;
     div.style.cssText = "position:absolute;font-size:1em;width:1em";
     if (!body) {
       body = fakeUsed = doc.createElement("body");
@@ -104,8 +110,11 @@
     }
     ret = eminpx = parseFloat(ret);
     return ret;
-  }, applyMedia = function(fromResize) {
-    var name = "clientWidth", docElemProp = docElem[name], currWidth = doc.compatMode === "CSS1Compat" && docElemProp || doc.body[name] || docElemProp, styleBlocks = {}, lastLink = links[links.length - 1], now = new Date().getTime();
+  }, applyMedia = function (fromResize) {
+    var name = "clientWidth", docElemProp = docElem[name], currWidth = doc.compatMode
+        === "CSS1Compat" && docElemProp || doc.body[name]
+        || docElemProp, styleBlocks = {}, lastLink = links[links.length
+    - 1], now = new Date().getTime();
     if (fromResize && lastCall && now - lastCall < resizeThrottle) {
       w.clearTimeout(resizeDefer);
       resizeDefer = w.setTimeout(applyMedia, resizeThrottle);
@@ -115,14 +124,18 @@
     }
     for (var i in mediastyles) {
       if (mediastyles.hasOwnProperty(i)) {
-        var thisstyle = mediastyles[i], min = thisstyle.minw, max = thisstyle.maxw, minnull = min === null, maxnull = max === null, em = "em";
+        var thisstyle = mediastyles[i], min = thisstyle.minw, max = thisstyle.maxw, minnull = min
+            === null, maxnull = max === null, em = "em";
         if (!!min) {
-          min = parseFloat(min) * (min.indexOf(em) > -1 ? eminpx || getEmValue() : 1);
+          min = parseFloat(min) * (min.indexOf(em) > -1 ? eminpx || getEmValue()
+              : 1);
         }
         if (!!max) {
-          max = parseFloat(max) * (max.indexOf(em) > -1 ? eminpx || getEmValue() : 1);
+          max = parseFloat(max) * (max.indexOf(em) > -1 ? eminpx || getEmValue()
+              : 1);
         }
-        if (!thisstyle.hasquery || (!minnull || !maxnull) && (minnull || currWidth >= min) && (maxnull || currWidth <= max)) {
+        if (!thisstyle.hasquery || (!minnull || !maxnull) && (minnull
+            || currWidth >= min) && (maxnull || currWidth <= max)) {
           if (!styleBlocks[thisstyle.media]) {
             styleBlocks[thisstyle.media] = [];
           }
@@ -152,10 +165,12 @@
         appendedEls.push(ss);
       }
     }
-  }, translate = function(styles, href, media) {
-    var qs = styles.replace(respond.regex.comments, "").replace(respond.regex.keyframes, "").match(respond.regex.media), ql = qs && qs.length || 0;
+  }, translate = function (styles, href, media) {
+    var qs = styles.replace(respond.regex.comments,
+        "").replace(respond.regex.keyframes,
+        "").match(respond.regex.media), ql = qs && qs.length || 0;
     href = href.substring(0, href.lastIndexOf("/"));
-    var repUrls = function(css) {
+    var repUrls = function (css) {
       return css.replace(respond.regex.urls, "$1" + href + "$2$3");
     }, useMedia = !ql && media;
     if (href.length) {
@@ -181,35 +196,41 @@
           continue;
         }
         mediastyles.push({
-          media: thisq.split("(")[0].match(respond.regex.only) && RegExp.$2 || "all",
+          media: thisq.split("(")[0].match(respond.regex.only) && RegExp.$2
+          || "all",
           rules: rules.length - 1,
           hasquery: thisq.indexOf("(") > -1,
-          minw: thisq.match(respond.regex.minw) && parseFloat(RegExp.$1) + (RegExp.$2 || ""),
-          maxw: thisq.match(respond.regex.maxw) && parseFloat(RegExp.$1) + (RegExp.$2 || "")
+          minw: thisq.match(respond.regex.minw) && parseFloat(RegExp.$1)
+          + (RegExp.$2 || ""),
+          maxw: thisq.match(respond.regex.maxw) && parseFloat(RegExp.$1)
+          + (RegExp.$2 || "")
         });
       }
     }
     applyMedia();
-  }, makeRequests = function() {
+  }, makeRequests = function () {
     if (requestQueue.length) {
       var thisRequest = requestQueue.shift();
-      ajax(thisRequest.href, function(styles) {
+      ajax(thisRequest.href, function (styles) {
         translate(styles, thisRequest.href, thisRequest.media);
         parsedSheets[thisRequest.href] = true;
-        w.setTimeout(function() {
+        w.setTimeout(function () {
           makeRequests();
         }, 0);
       });
     }
-  }, ripCSS = function() {
+  }, ripCSS = function () {
     for (var i = 0; i < links.length; i++) {
-      var sheet = links[i], href = sheet.href, media = sheet.media, isCSS = sheet.rel && sheet.rel.toLowerCase() === "stylesheet";
+      var sheet = links[i], href = sheet.href, media = sheet.media, isCSS = sheet.rel
+          && sheet.rel.toLowerCase() === "stylesheet";
       if (!!href && isCSS && !parsedSheets[href]) {
         if (sheet.styleSheet && sheet.styleSheet.rawCssText) {
           translate(sheet.styleSheet.rawCssText, href, media);
           parsedSheets[href] = true;
         } else {
-          if (!/^([a-zA-Z:]*\/\/)/.test(href) && !base || href.replace(RegExp.$1, "").split("/")[0] === w.location.host) {
+          if (!/^([a-zA-Z:]*\/\/)/.test(href) && !base
+              || href.replace(RegExp.$1, "").split("/")[0]
+              === w.location.host) {
             if (href.substring(0, 2) === "//") {
               href = w.location.protocol + href;
             }
@@ -229,6 +250,7 @@
   function callMedia() {
     applyMedia(true);
   }
+
   if (w.addEventListener) {
     w.addEventListener("resize", callMedia, false);
   } else if (w.attachEvent) {
