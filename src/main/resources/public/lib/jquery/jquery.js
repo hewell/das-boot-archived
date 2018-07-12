@@ -730,8 +730,9 @@
               // For use in libraries implementing .is()
               // We use this for POS matching in `select`
               "needsContext": new RegExp("^" + whitespace
-              + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
-              whitespace + "*((?:-\\d)?\\d*)" + whitespace + "*\\)|)(?=[^-]|$)",
+                  + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
+                  whitespace + "*((?:-\\d)?\\d*)" + whitespace
+                  + "*\\)|)(?=[^-]|$)",
                   "i")
             },
 
@@ -3411,7 +3412,7 @@
                           .progress(newDefer.notify);
                     } else {
                       newDefer[tuple[0] + "With"](this === promise
-                          ? newDefer.promise() : this,
+                              ? newDefer.promise() : this,
                           fn ? [returned] : arguments);
                     }
                   });
@@ -8646,9 +8647,9 @@
 // Return jQuery for attributes-only inclusion
 
   jQuery.each(("blur focus focusin focusout load resize scroll unload click dblclick "
-  +
-  "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-  "change select submit keydown keypress keyup error contextmenu").split(" "),
+      +
+      "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+      "change select submit keydown keypress keyup error contextmenu").split(" "),
       function (i, name) {
 
         // Handle event binding

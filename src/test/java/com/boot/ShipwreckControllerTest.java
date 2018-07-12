@@ -1,7 +1,9 @@
 package com.boot;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.boot.controller.ShipwreckController;
 import com.boot.model.Shipwreck;
@@ -13,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class ShipwreckControllerTest {
+
   @InjectMocks
   private ShipwreckController sc;
 
@@ -20,12 +23,12 @@ public class ShipwreckControllerTest {
   private ShipwreckRepository repository;
 
   @Before
-  public void init(){
+  public void init() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test
-  public void testShipwreckGet(){
+  public void testShipwreckGet() {
 
     Shipwreck wreck = new Shipwreck();
     wreck.setId(1l);
@@ -35,6 +38,6 @@ public class ShipwreckControllerTest {
 
     verify(repository).findOne(1l);
 
-    assertEquals(1l, sw.getId().longValue());
+    assertThat(sw.getId(), is(1l));
   }
 }

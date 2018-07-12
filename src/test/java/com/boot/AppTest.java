@@ -8,7 +8,7 @@ import org.junit.Test;
 public class AppTest {
 
   @Test
-  public void testApp(){
+  public void testApp() {
     HomeController hc = new HomeController();
     String result = hc.home();
     assertEquals(result, "Hello, World!");
